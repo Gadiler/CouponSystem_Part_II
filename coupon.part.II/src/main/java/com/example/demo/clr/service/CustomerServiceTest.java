@@ -2,6 +2,7 @@ package com.example.demo.clr.service;
 
 import com.example.demo.services.interfaces.CustomerService;
 import com.example.demo.utils.ArtUtils;
+import com.example.demo.utils.TestUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceTest implements CommandLineRunner {
     private final CustomerService customerService;
     private final ArtUtils artUtils;
+    private final TestUtils testUtils;
+
     @Override
     public void run(String... args) throws Exception {
         System.out.println(ArtUtils.CUSTOMER_SERVICE);

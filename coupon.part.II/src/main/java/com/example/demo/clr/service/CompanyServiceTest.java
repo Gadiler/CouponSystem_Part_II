@@ -20,6 +20,7 @@ public class CompanyServiceTest implements CommandLineRunner {
 
     private final CompanyService companyService;
     private final TestUtils testUtils;
+    private final ArtUtils artUtils;
 
     @Override
     public void run(String... args) throws Exception {
@@ -41,7 +42,8 @@ public class CompanyServiceTest implements CommandLineRunner {
         } catch (CouponException e) {
             System.err.println(e.getMessage());
         }
-        this.companyService.getAllCoupons().forEach(System.out::println);
+//        this.companyService.getAllCoupons().forEach(System.out::println);
+        artUtils.printCouponsTable();
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Add Coupon");
@@ -51,7 +53,8 @@ public class CompanyServiceTest implements CommandLineRunner {
         } catch (CouponException e) {
             System.err.println(e.getMessage());
         }
-        this.companyService.getAllCoupons().forEach(System.out::println);
+//        this.companyService.getAllCoupons().forEach(System.out::println);
+        artUtils.printCouponsTable();
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Update Coupon");
@@ -61,7 +64,8 @@ public class CompanyServiceTest implements CommandLineRunner {
         } catch (CouponException e) {
             System.err.println(e.getMessage());
         }
-        this.companyService.getAllCoupons().forEach(System.out::println);
+//        this.companyService.getAllCoupons().forEach(System.out::println);
+        artUtils.printCouponsTable();
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Update Coupon");
@@ -71,7 +75,8 @@ public class CompanyServiceTest implements CommandLineRunner {
         } catch (CouponException e) {
             System.err.println(e.getMessage());
         }
-        this.companyService.getAllCoupons().forEach(System.out::println);
+//        this.companyService.getAllCoupons().forEach(System.out::println);
+        artUtils.printCouponsTable();
         ArtUtils.printSeparator();
 
 
@@ -104,7 +109,8 @@ public class CompanyServiceTest implements CommandLineRunner {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.companyService.getAllCoupons().forEach(System.out::println);
+//        this.companyService.getAllCoupons().forEach(System.out::println);
+        artUtils.printCouponsTable();
         ArtUtils.printSeparator();
 
 
@@ -115,7 +121,8 @@ public class CompanyServiceTest implements CommandLineRunner {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.companyService.getAllCoupons().forEach(System.out::println);
+//        this.companyService.getAllCoupons().forEach(System.out::println);
+        artUtils.printCouponsTable();
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Get All Coupons");

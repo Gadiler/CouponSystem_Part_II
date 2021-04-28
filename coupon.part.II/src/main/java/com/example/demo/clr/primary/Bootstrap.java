@@ -26,6 +26,7 @@ public class Bootstrap implements CommandLineRunner {
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
     private final TestUtils testUtils;
+    private final ArtUtils artUtils;
 
     @Override
     public void run(String... args) throws Exception {
@@ -68,19 +69,22 @@ public class Bootstrap implements CommandLineRunner {
         ArtUtils.testTitle("Add Companies");
         testUtils.printTestHeader("Add Companies");
         companyRepository.saveAll(Arrays.asList(com1, com2, com3, com4, com5, com6, com7, com8, com9, com10));
-        companyRepository.findAll().forEach(System.out::println);
+//        companyRepository.findAll().forEach(System.out::println);
+        artUtils.printCompaniesTable();
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Add Coupons");
         testUtils.printTestHeader("Add Coupons");
         couponRepository.saveAll(Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10));
-        couponRepository.findAll().forEach(System.out::println);
+//        couponRepository.findAll().forEach(System.out::println);
+        artUtils.printCouponsTable();
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Add Customers");
         testUtils.printTestHeader("Add Customers");
         customerRepository.saveAll(Arrays.asList(cs0, cs1, cs2, cs3, cs4, cs5, cs6, cs7, cs8, cs9, cs10));
-        customerRepository.findAll().forEach(System.out::println);
+//        customerRepository.findAll().forEach(System.out::println);
+        artUtils.printCustomersTable();
         ArtUtils.printSeparator();
 
 

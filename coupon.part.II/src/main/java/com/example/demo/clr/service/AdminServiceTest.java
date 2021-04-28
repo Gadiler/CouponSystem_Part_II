@@ -99,7 +99,8 @@ public class AdminServiceTest implements CommandLineRunner {
         ArtUtils.testTitle("Delete Company");
         testUtils.printTestHeader("Delete Company");
         adminService.deleteCompany(11);
-        adminService.getAllCompanies().forEach(System.out::println);
+//        adminService.getAllCompanies().forEach(System.out::println);
+        artUtils.printCompaniesTable();
         ArtUtils.printSeparator();
         /*Admin Company*/
 
@@ -116,7 +117,8 @@ public class AdminServiceTest implements CommandLineRunner {
         ArtUtils.testTitle("Add Customer");
         testUtils.printTestHeader("Add Customer - Correct");
         adminService.addCustomer(Customer.builder().id(11).firstName("Gadi").lastName("Engelsman").email("Gadi@Gmail.com").password("12345").build());
-        adminService.getAllCustomers().forEach(System.out::println);
+//        adminService.getAllCustomers().forEach(System.out::println);
+        artUtils.printCustomersTable();
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Update Customer");
@@ -131,7 +133,8 @@ public class AdminServiceTest implements CommandLineRunner {
         ArtUtils.testTitle("Update Customer");
         testUtils.printTestHeader("Update Customer - Correct -> Update Email address");
         adminService.updateCustomer(Customer.builder().id(11).firstName("Gadi").lastName("Engelsman").email("Gadi.Engelsman@Gmail.com").password("1234567").build());
-        adminService.getAllCustomers().forEach(System.out::println);
+//        adminService.getAllCustomers().forEach(System.out::println);
+        artUtils.printCustomersTable();
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Get Single Customer");
@@ -142,7 +145,8 @@ public class AdminServiceTest implements CommandLineRunner {
         ArtUtils.testTitle("Delete Customer");
         testUtils.printTestHeader("Delete Customer");
         adminService.deleteCustomer(11);
-        adminService.getAllCustomers().forEach(System.out::println);
+//        adminService.getAllCustomers().forEach(System.out::println);
+        artUtils.printCustomersTable();
         ArtUtils.printSeparator();
         /*Admin Customer*/
 
