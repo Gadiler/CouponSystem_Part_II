@@ -18,11 +18,11 @@ import org.springframework.stereotype.Component;
 public class DailyCouponRemovalTask {
     private final CouponRepository couponRepository;
 
-    @Scheduled(fixedRate = (1000*10))
+    @Scheduled(fixedRate = (1000 * 10))
     public void removeExpired() {
         System.out.println("##### Expired Coupon Collector ####");
         for (Coupon coupon : couponRepository.findAll()) {
-            if(coupon.getEndDate().compareTo(DateUtils.getCurrentDate())<0){
+            if (coupon.getEndDate().compareTo(DateUtils.getCurrentDate()) < 0) {
                 couponRepository.delete(coupon);
             }
         }
