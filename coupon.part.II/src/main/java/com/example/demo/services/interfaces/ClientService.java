@@ -15,4 +15,18 @@ public abstract class ClientService {
     protected final CustomerRepository customerRepository;
 
     public abstract boolean login(String email, String password);
+
+    /**
+     * Run through each Coupon, if coupon.companyId == companyId then update. else, delete.
+     */
+    protected void syncCouponToCustomer() {
+        couponRepository.findAll().forEach(coupon -> {
+            companyRepository.findById(coupon.getCompanyId()).ifPresentOrElse(company -> {
+                if (!company.getCoupons().contains(coupon)) {
+                    company.getCoupons().add(coupon);
+                    companyRepository.saveAndFlush(company);
+                }
+            }, () -> couponRepository.deleteById(coupon.getId()));
+        });
+    }
 }

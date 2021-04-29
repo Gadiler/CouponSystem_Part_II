@@ -18,6 +18,7 @@ import java.util.List;
 public class AdminServiceImpl extends ClientService implements AdminService {
     public AdminServiceImpl(CompanyRepository companyRepository, CouponRepository couponRepository, CustomerRepository customerRepository) {
         super(companyRepository, couponRepository, customerRepository);
+        syncCouponToCustomer();
     }
 
     @Override
@@ -41,6 +42,7 @@ public class AdminServiceImpl extends ClientService implements AdminService {
                 throw new CompanyException("The email already exist!");
         }
         this.companyRepository.save(companyToAdd);
+        syncCouponToCustomer();
     }
 
     @Override
@@ -48,6 +50,7 @@ public class AdminServiceImpl extends ClientService implements AdminService {
         for (Company comp : getAllCompanies()) {
             if (comp.getName().equalsIgnoreCase(companyToUpdate.getName()) && comp.getId() == companyToUpdate.getId()) {
                 this.companyRepository.saveAndFlush(companyToUpdate);
+                syncCouponToCustomer();
                 return;
             }
         }
@@ -56,9 +59,10 @@ public class AdminServiceImpl extends ClientService implements AdminService {
 
     @Override
     public void deleteCompany(int companyId) throws CompanyException {
-        if (this.companyRepository.existsById(companyId))
+        if (this.companyRepository.existsById(companyId)) {
             this.companyRepository.deleteById(companyId);
-        else
+            syncCouponToCustomer();
+        } else
             throw new CompanyException("The company id: " + companyId + " NOT exist to delete!");
     }
 
@@ -107,4 +111,5 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     public List<Customer> getAllCustomers() {
         return this.customerRepository.findAll();
     }
+
 }

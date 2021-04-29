@@ -39,6 +39,7 @@ public class AdminServiceTest implements CommandLineRunner {
         try {
             adminService.addCompany(Company.builder().id(11).name("Samsung").email("Cola@Gmail.com").password("1234").build());
         } catch (CompanyException e) {
+            Thread.sleep(100);
             System.err.println(e.getMessage());
         }
         ArtUtils.printSeparator();
@@ -48,6 +49,7 @@ public class AdminServiceTest implements CommandLineRunner {
         try {
             adminService.addCompany(Company.builder().id(11).name("Coca Cola").email("Samsung@Gmail.com").password("1234").build());
         } catch (CompanyException e) {
+            Thread.sleep(100);
             System.err.println(e.getMessage());
         }
         ArtUtils.printSeparator();
@@ -55,6 +57,7 @@ public class AdminServiceTest implements CommandLineRunner {
         ArtUtils.testTitle("Add Company");
         testUtils.printTestHeader("Add Company - Correct");
         adminService.addCompany(Company.builder().id(11).name("Samsung").email("Samsung@Gmail.com").password("1234").build());
+        adminService.getAllCompanies().forEach(System.out::println);
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Update Company");
@@ -62,6 +65,7 @@ public class AdminServiceTest implements CommandLineRunner {
         try {
             adminService.updateCompany(Company.builder().id(12).name("Samsung").email("Samsung@Gmail.com").password("123456789").build());
         } catch (CompanyException e) {
+            Thread.sleep(100);
             System.err.println(e.getMessage());
         }
         ArtUtils.printSeparator();
@@ -71,6 +75,7 @@ public class AdminServiceTest implements CommandLineRunner {
         try {
             adminService.updateCompany(Company.builder().id(11).name("ShamShung").email("Samsung@Gmail.com").password("123456789").build());
         } catch (CompanyException e) {
+            Thread.sleep(100);
             System.err.println(e.getMessage());
         }
         ArtUtils.printSeparator();
@@ -80,6 +85,7 @@ public class AdminServiceTest implements CommandLineRunner {
         try {
             adminService.updateCompany(Company.builder().id(12).name("Samsung").email("Samsung@Gmail.com").password("123456789").build());
         } catch (CompanyException e) {
+            Thread.sleep(100);
             System.err.println(e.getMessage());
         }
         ArtUtils.printSeparator();
@@ -98,8 +104,9 @@ public class AdminServiceTest implements CommandLineRunner {
 
         ArtUtils.testTitle("Delete Company");
         testUtils.printTestHeader("Delete Company");
-        adminService.deleteCompany(11);
-//        adminService.getAllCompanies().forEach(System.out::println);
+        adminService.deleteCompany(10);
+        adminService.getAllCompanies().forEach(System.out::println);
+        ArtUtils.printSeparator();
         artUtils.printCompaniesTable();
         ArtUtils.printSeparator();
         /*Admin Company*/
@@ -110,6 +117,7 @@ public class AdminServiceTest implements CommandLineRunner {
         try {
             adminService.addCustomer(Customer.builder().id(11).firstName("Gadi").lastName("Engelsman").email("Barney@Gmail.com").password("12345").build());
         } catch (Exception e) {
+            Thread.sleep(100);
             System.err.println(e.getMessage());
         }
         ArtUtils.printSeparator();
