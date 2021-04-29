@@ -27,8 +27,6 @@ public class CompanyServiceTest implements CommandLineRunner {
         System.out.println(ArtUtils.COMPANY_SERVICE);
 
         /*Company*/
-
-
         ArtUtils.testTitle("Get Last logged company");
         testUtils.printTestHeader("Get Last logged company - No one logged already");
         try {

@@ -60,7 +60,7 @@ public class CustomerServiceTest implements CommandLineRunner {
         testUtils.printTestHeader("Get Single Coupon id = 2");
         try {
             System.out.println(customerService.getSingleCoupon(2));
-        }catch (CouponException e) {
+        } catch (CouponException e) {
             System.err.println(e.getMessage());
         }
         ArtUtils.printSeparator();

@@ -15,7 +15,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
@@ -55,6 +58,7 @@ public class Bootstrap implements CommandLineRunner {
         Customer cs9 = Customer.builder().id(9).firstName("Joey").lastName("Tribbiani").email("Tribbiani@Gmail.com").password("Tribbiani").build();
         Customer cs10 = Customer.builder().id(10).firstName("Chandler").lastName("Bing").email("Bing@Gmail.com").password("Bing").build();
 
+
         Coupon c1 = Coupon.builder().id(1).companyId(2).category(Category.ELECTRICITY).title("Electricity").description("Electricity products discount").startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).amount(10).price(500.0).image("c://programfile").build();
         Coupon c2 = Coupon.builder().id(2).companyId(1).category(Category.FOOD).title("Drinks").description("Drinks discount").startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).amount(10).price(5000.0).image("c://programfile").build();
         Coupon c3 = Coupon.builder().id(3).companyId(4).category(Category.FOOD).title("Drinks & Chill").description("Discount on any product of Nestle").startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).amount(10).price(50.0).image("c://programfile").build();
@@ -65,6 +69,9 @@ public class Bootstrap implements CommandLineRunner {
         Coupon c8 = Coupon.builder().id(8).companyId(9).category(Category.FOOD).title("Drinks on the house").description("Discount on any product of Nestle").startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).amount(10).price(50.0).image("c://programfile").build();
         Coupon c9 = Coupon.builder().id(9).companyId(8).category(Category.VACATION).title("Vacation at the most beautiful place").description("Vacation discount").startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).amount(10).price(1850.0).image("c://programfile").build();
         Coupon c10 = Coupon.builder().id(10).companyId(10).category(Category.RESTAURANT).title("Food 1+1").description("Food discount").startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).amount(10).price(1150.0).image("c://programfile").build();
+        /*Expired date coupon*/
+        Coupon c11 = Coupon.builder().id(10).companyId(6).category(Category.RESTAURANT).title("Food 1+1").description("Food discount").startDate(new Date()).endDate(java.sql.Date.from((LocalDate.now().minusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()))).amount(10).price(1150.0).image("c://programfile").build();
+        Coupon c12 = Coupon.builder().id(10).companyId(6).category(Category.RESTAURANT).title("Food 1+1").description("Food discount").startDate(new Date()).endDate(java.sql.Date.from((LocalDate.now().minusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()))).amount(10).price(1150.0).image("c://programfile").build();
 
         ArtUtils.testTitle("Add Companies");
         testUtils.printTestHeader("Add Companies");
