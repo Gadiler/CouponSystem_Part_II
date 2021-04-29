@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/CouponSystem_Part_II.iml" filepath="$PROJECT_DIR$/.idea/CouponSystem_Part_II.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coupon.part.II/coupon.part.II.iml" filepath="$PROJECT_DIR$/coupon.part.II/coupon.part.II.iml" />
+    </modules>
+  </component>
+</project>

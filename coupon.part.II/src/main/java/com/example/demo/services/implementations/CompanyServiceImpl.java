@@ -3,8 +3,10 @@ package com.example.demo.services.implementations;
 import com.example.demo.accessingdatajpa.CompanyRepository;
 import com.example.demo.accessingdatajpa.CouponRepository;
 import com.example.demo.accessingdatajpa.CustomerRepository;
+import com.example.demo.beans.Category;
 import com.example.demo.beans.Company;
 import com.example.demo.beans.Coupon;
+import com.example.demo.exceptions.CompanyException;
 import com.example.demo.exceptions.CouponException;
 import com.example.demo.services.interfaces.ClientService;
 import com.example.demo.services.interfaces.CompanyService;
@@ -15,14 +17,18 @@ import java.util.List;
 
 @Service
 public class CompanyServiceImpl extends ClientService implements CompanyService {
+    private int lastCompanyId;
+
     public CompanyServiceImpl(CompanyRepository companyRepository, CouponRepository couponRepository, CustomerRepository customerRepository) {
         super(companyRepository, couponRepository, customerRepository);
+        syncCouponToCustomer();
     }
 
     @Override
     public boolean login(String email, String password) {
         for (Company company : this.companyRepository.findAll()) {
             if (company.getEmail().equalsIgnoreCase(email) && company.getPassword().equals(password)) {
+                lastCompanyId = company.getId();
                 return true;
             }
         }
@@ -30,13 +36,13 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
     }
 
     @Override
-    public void addCoupon(Coupon couponToAdd) throws CouponException {
+    public void addCoupon(Coupon couponToAdd) throws CouponException, CompanyException {
         for (Coupon coupon : getAllCoupons()) {
             if (coupon.getTitle().equalsIgnoreCase(couponToAdd.getTitle()) && (coupon.getCompanyId() == couponToAdd.getCompanyId())) {
                 throw new CouponException("The title: " + couponToAdd.getTitle() + " is already in use!");
             }
         }
-        this.couponRepository.save(couponToAdd);
+        syncCouponToCustomer();
     }
 
     @Override
@@ -44,6 +50,7 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
         for (Coupon coupon : getAllCoupons()) {
             if (coupon.getId() == couponToUpdate.getId() && coupon.getCompanyId() == couponToUpdate.getCompanyId()) {
                 this.couponRepository.saveAndFlush(couponToUpdate);
+                syncCouponToCustomer();
                 return;
             }
         }
@@ -51,8 +58,13 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
     }
 
     @Override
-    public void deleteCoupon(int couponId) {
-        this.couponRepository.deleteById(couponId);
+    public void deleteCoupon(int couponId) throws CouponException {
+        if (couponRepository.findById(couponId).isPresent()) {
+            couponRepository.deleteById(couponId);
+            syncCouponToCustomer();
+        } else {
+            throw new CouponException("Can't find the company!");
+        }
     }
 
     @Override
@@ -81,7 +93,26 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
     }
 
     @Override
+    public List<Coupon> getAllCouponFromCategory(Category category) {
+        List<Coupon> couponList = new ArrayList<>();
+        for (Coupon coupon : getAllCoupons()) {
+            if (coupon.getCategory().equals(category))
+                couponList.add(coupon);
+        }
+        return couponList;
+    }
+
+    @Override
     public List<Coupon> getAllCoupons() {
-        return this.couponRepository.findAll();
+        if (companyRepository.findById(lastCompanyId).isPresent()) {
+            Company company = companyRepository.findById(lastCompanyId).get();
+            return company.getCoupons();
+        }
+        return null;
+    }
+
+    @Override
+    public Company getLastLoggedCompany() throws CompanyException {
+        return companyRepository.findById(lastCompanyId).orElseThrow(() -> new CompanyException("There isn't Last Company!"));
     }
 }
