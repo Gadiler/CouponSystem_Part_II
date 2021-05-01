@@ -92,7 +92,7 @@ public class CompanyServiceTest implements CommandLineRunner {
         ArtUtils.printSeparator();
 
 
-        ArtUtils.testTitle("Get All Coupons");
+        ArtUtils.testTitle("Get Single Coupon");
         testUtils.printTestHeader("Get Single Coupons id = 13 -> WRONG ID");
         try {
             companyService.getSingleCoupon(13);
@@ -133,12 +133,12 @@ public class CompanyServiceTest implements CommandLineRunner {
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Get All Coupons");
-        testUtils.printTestHeader("Get All Coupons with max amount = 500");
+        testUtils.printTestHeader("Get All Coupons with max Price = 500");
         companyService.getAllCouponMaxPrice(500).forEach(System.out::println);
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Get All Coupons");
-        testUtils.printTestHeader("Get All Coupons with min amount = 500");
+        testUtils.printTestHeader("Get All Coupons with min Price = 500");
         companyService.getAllCouponMinPrice(500).forEach(System.out::println);
         ArtUtils.printSeparator();
 

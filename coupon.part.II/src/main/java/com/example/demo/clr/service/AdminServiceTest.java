@@ -25,7 +25,18 @@ public class AdminServiceTest implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println(ArtUtils.ADMIN_SERVICE);
 
+
         /*Admin Company*/
+//        ArtUtils.testTitle("Get Last logged company");
+//        testUtils.printTestHeader("Get Last logged company - No one logged already");
+//        try {
+//            System.out.println(adminService.getLastLoggedCompany());
+//        } catch (Exception e) {
+//            Thread.sleep(100);
+//            System.err.println(e.getMessage());
+//        }
+//        ArtUtils.printSeparator();
+
         ArtUtils.testTitle("Login");
         testUtils.printTestHeader("Login - Wrong Email & Password");
         System.out.println(((ClientService) adminService).login("Administrator@Admin.com", "123456"));

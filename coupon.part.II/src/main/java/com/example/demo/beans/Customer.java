@@ -6,10 +6,7 @@
 
 package com.example.demo.beans;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,7 +28,7 @@ public class Customer {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @Singular
+    @Singular("oneCoupon")
     private List<Coupon> couponList = new ArrayList<>();
 
 }
