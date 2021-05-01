@@ -20,5 +20,8 @@ public interface CustomerService {
 
     List<Coupon> getAllCouponMaxPrice(int maxPrice);
 
+    List<Coupon> getAllCouponMinPrice(int minPrice);
+
     Customer getLastLoggedCustomer() throws CustomerException;
+
 }

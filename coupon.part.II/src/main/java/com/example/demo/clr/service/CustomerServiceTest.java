@@ -24,8 +24,19 @@ public class CustomerServiceTest implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println(ArtUtils.CUSTOMER_SERVICE);
-        artUtils.printCompaniesTable();
+        System.out.println(ArtUtils.CUSTOMER_SERVICE + "\n");
+        artUtils.printCustomersTable();
+        System.out.println("\n");
+
+        ArtUtils.testTitle("Get Last logged customer");
+        testUtils.printTestHeader("Get Last logged customer - No one logged already");
+        try {
+            System.out.println(customerService.getLastLoggedCustomer());
+        } catch (Exception e) {
+            Thread.sleep(100);
+            System.err.println(e.getMessage());
+        }
+        ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Login");
         testUtils.printTestHeader("Login - Wrong Email & Password");
@@ -36,7 +47,7 @@ public class CustomerServiceTest implements CommandLineRunner {
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Purchase Coupon");
-        testUtils.printTestHeader("Purchase Coupon -> Wrong id");
+        testUtils.printTestHeader("Purchase Coupon -> Wrong id, print las customer without coupons");
         try {
             customerService.purchaseCoupon(Coupon.builder().category(Category.FOOD).title("Drinks").description("Drinks 50% discount").startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).amount(20).price(5000.0).image("c://programfile").build());
         } catch (ExistException e) {
@@ -67,12 +78,12 @@ public class CustomerServiceTest implements CommandLineRunner {
 
         ArtUtils.testTitle("Get All Coupons");
         testUtils.printTestHeader("Get All Coupons with max price = 500");
-        customerService.getAllCoupons().forEach(System.out::println);
+        customerService.getAllCouponMaxPrice(500).forEach(System.out::println);
         ArtUtils.printSeparator();
 
         ArtUtils.testTitle("Get All Coupons");
-        testUtils.printTestHeader("Get All Coupons with min price = 500");
-        customerService.getAllCouponMaxPrice(500).forEach(System.out::println);
+        testUtils.printTestHeader("Get All Coupons with min price = 149");
+        customerService.getAllCouponMinPrice(149).forEach(System.out::println);
         ArtUtils.printSeparator();
 
 

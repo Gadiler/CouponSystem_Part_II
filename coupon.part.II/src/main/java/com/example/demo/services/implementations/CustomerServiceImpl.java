@@ -105,6 +105,16 @@ public class CustomerServiceImpl extends ClientService implements CustomerServic
     }
 
     @Override
+    public List<Coupon> getAllCouponMinPrice(int minPrice) {
+        List<Coupon> couponList = new ArrayList<>();
+        for (Coupon coupon : getAllCoupons()) {
+            if (coupon.getPrice() > minPrice)
+                couponList.add(coupon);
+        }
+        return couponList;
+    }
+
+    @Override
     public Customer getLastLoggedCustomer() throws CustomerException {
         return customerRepository.findById(lastCustomerId).orElseThrow(() -> new CustomerException("There isn't Last Customer!"));
     }

@@ -24,7 +24,9 @@ public class CompanyServiceTest implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println(ArtUtils.COMPANY_SERVICE);
+        System.out.println(ArtUtils.COMPANY_SERVICE + "\n");
+        artUtils.printCompaniesTable();
+        System.out.println("\n");
 
         /*Company*/
         ArtUtils.testTitle("Get Last logged company");
