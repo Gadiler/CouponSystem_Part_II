@@ -1,7 +1,7 @@
 # CouponSystem
 Author by: Gadi Engelsman.
 
-Coupons system with JDBC (MySQL) implementation.
+Coupons system with SpringBoot implementation, with access to database (MySQL).
 
 ## The Coupon System project phase 2:
 
