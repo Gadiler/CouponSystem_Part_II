@@ -37,12 +37,19 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
 
     @Override
     public void addCoupon(Coupon couponToAdd) throws CouponException, CompanyException {
+        boolean flag = false;
         for (Coupon coupon : getAllCoupons()) {
             if (coupon.getTitle().equalsIgnoreCase(couponToAdd.getTitle()) && (coupon.getCompanyId() == couponToAdd.getCompanyId())) {
                 throw new CouponException("The title: " + couponToAdd.getTitle() + " is already in use!");
             }
+            if(couponToAdd.getCompanyId() == coupon.getCompanyId() && !flag){
+                flag = true;
+            }
+        }if (flag){
+            syncCouponToCustomer();
+            return;
         }
-        syncCouponToCustomer();
+        throw new CouponException("The id: " + couponToAdd.getCompanyId() + " isn't found!");
     }
 
     @Override

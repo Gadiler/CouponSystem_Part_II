@@ -46,6 +46,7 @@ public class CompanyServiceTest implements CommandLineRunner {
         testUtils.printTestHeader("Login - Correct");
         System.out.println(((ClientService) companyService).login("McDonalds@Gmail.com", "1234"));
         ArtUtils.printSeparator();
+        System.out.println(companyService.getAllCoupons());
 
         ArtUtils.testTitle("Add Coupon");
         testUtils.printTestHeader("addCoupon - Wrong title & companyId");
@@ -83,7 +84,7 @@ public class CompanyServiceTest implements CommandLineRunner {
         ArtUtils.testTitle("Update Coupon");
         testUtils.printTestHeader("Update Coupon - Correct");
         try {
-            companyService.updateCoupon(Coupon.builder().id(11).title("Food & Drinks & Chill").companyId(9).description("Go go magog").category(Category.FOOD).amount(10).price(640).startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).image("No have").build());
+            companyService.updateCoupon(Coupon.builder().id(8).title("Food & Drinks & Chill").companyId(9).description("Go go magog").category(Category.FOOD).amount(10).price(640).startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).image("No have").build());
         } catch (CouponException e) {
             System.err.println(e.getMessage());
         }
@@ -131,6 +132,10 @@ public class CompanyServiceTest implements CommandLineRunner {
 //        this.companyService.getAllCoupons().forEach(System.out::println);
         artUtils.printCouponsTable();
         ArtUtils.printSeparator();
+        artUtils.printCompaniesTable();
+//        customerService.getAllCoupons().forEach(System.out::println);
+        ArtUtils.printSeparator();
+
 
         ArtUtils.testTitle("Get All Coupons");
         testUtils.printTestHeader("Get All Coupons with max Price = 500");

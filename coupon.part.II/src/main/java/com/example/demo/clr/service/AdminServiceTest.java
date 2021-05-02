@@ -110,16 +110,26 @@ public class AdminServiceTest implements CommandLineRunner {
 
         ArtUtils.testTitle("Get Single Company");
         testUtils.printTestHeader("Get Single Company with id = 11");
-        System.out.println(adminService.getSingleCompany(11));
+        System.out.println(adminService.getSingleCompany(10));
         ArtUtils.printSeparator();
+
+        Customer c = adminService.getSingleCustomer(1);
+        c.getCouponList().addAll(adminService.getSingleCompany(10).getCoupons());
+        adminService.updateCustomer(c);
 
         ArtUtils.testTitle("Delete Company");
         testUtils.printTestHeader("Delete Company");
-        adminService.deleteCompany(10);
-        adminService.getAllCompanies().forEach(System.out::println);
+
+        adminService.getAllCustomers().forEach(System.out::println);
         ArtUtils.printSeparator();
+        adminService.deleteCompany(10);
+
         artUtils.printCompaniesTable();
         ArtUtils.printSeparator();
+
+        adminService.getAllCustomers().forEach(System.out::println);
+        ArtUtils.printSeparator();
+
         /*Admin Company*/
 
         /*Admin Customer*/
