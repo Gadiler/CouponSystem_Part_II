@@ -6,15 +6,17 @@
 
 package com.example.demo.controllers;
 
+import com.example.demo.beans.Category;
 import com.example.demo.beans.Coupon;
 import com.example.demo.exceptions.*;
 import com.example.demo.services.interfaces.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
+
 
 @RestController
 @RequestMapping("customers")
@@ -24,15 +26,41 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PutMapping
-    public ResponseEntity<?> purchaseCoupon(Coupon couponToAdd){
+    public ResponseEntity<?> purchaseCoupon(@RequestBody Coupon couponToAdd) throws CustomerException, CouponException, AmountException, ExpirationDate, ExistException, CompanyException {
         //TODO: 1. What service use to add Customer.
-        // 2. Surround with try\catch or shall i add exception to signature?
-        try {
-            customerService.purchaseCoupon(couponToAdd);
-        } catch (ExistException | AmountException | ExpirationDate | CustomerException | CouponException | CompanyException e) {
-            e.printStackTrace();
-        }
+        customerService.purchaseCoupon(couponToAdd);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllCoupons() {
+        return new ResponseEntity<>(customerService.getAllCoupons(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{minPrice}")
+    public ResponseEntity<?> getAllCouponMinPrice(@PathVariable int minPrice) {
+        return new ResponseEntity<>(customerService.getAllCouponMinPrice(minPrice), HttpStatus.OK);
+    }
+
+    @GetMapping("/{maxPrice}")
+    public ResponseEntity<?> getAllCouponMaxPrice(@PathVariable int maxPrice) {
+        return new ResponseEntity<>(customerService.getAllCouponMaxPrice(maxPrice), HttpStatus.OK);
+    }
+
+    //TODO: Need to replace annotation to @PathParam
+    @GetMapping("/category")
+    public ResponseEntity<?> getAllCouponFromCategory(@PathParam("category") Category category) {
+        return new ResponseEntity<>(customerService.getAllCouponFromCategory(category), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getSingleCoupon(@PathVariable int id) throws CouponException {
+        return new ResponseEntity<>(customerService.getSingleCoupon(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/lastLogged")
+    public ResponseEntity<?> getLastLoggedCompany() throws CustomerException {
+        return new ResponseEntity<>(customerService.getLastLoggedCustomer(), HttpStatus.OK);
     }
 
 }
