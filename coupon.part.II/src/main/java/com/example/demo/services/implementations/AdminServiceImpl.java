@@ -4,8 +4,10 @@ import com.example.demo.accessingdatajpa.CompanyRepository;
 import com.example.demo.accessingdatajpa.CouponRepository;
 import com.example.demo.accessingdatajpa.CustomerRepository;
 import com.example.demo.beans.Company;
+import com.example.demo.beans.Coupon;
 import com.example.demo.beans.Customer;
 import com.example.demo.exceptions.CompanyException;
+import com.example.demo.exceptions.CouponException;
 import com.example.demo.exceptions.CustomerException;
 import com.example.demo.services.interfaces.AdminService;
 import com.example.demo.services.interfaces.ClientService;
@@ -42,6 +44,16 @@ public class AdminServiceImpl extends ClientService implements AdminService {
                 throw new CompanyException("The email already exist!");
         }
         this.companyRepository.save(companyToAdd);
+        syncCouponToCustomer();
+    }
+
+    //TODO: Complete the function eith more exceptions
+    @Override
+    public void addCoupon(Coupon couponToAdd) throws CouponException {
+        if (getAllCoupons().contains(couponToAdd)) {
+            throw new CouponException("The coupon already exist!");
+        }
+        couponRepository.save(couponToAdd);
         syncCouponToCustomer();
     }
 
@@ -110,6 +122,11 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     @Override
     public List<Customer> getAllCustomers() {
         return this.customerRepository.findAll();
+    }
+
+    @Override
+    public List<Coupon> getAllCoupons() {
+        return this.couponRepository.findAll();
     }
 
 }

@@ -36,7 +36,7 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
     }
 
     @Override
-    public void addCoupon(Coupon couponToAdd) throws CouponException, CompanyException {
+    public void addCoupon(Coupon couponToAdd) throws CouponException {
         boolean flag = false;
         for (Coupon coupon : getAllCoupons()) {
             if (coupon.getTitle().equalsIgnoreCase(couponToAdd.getTitle()) && (coupon.getCompanyId() == couponToAdd.getCompanyId())) {

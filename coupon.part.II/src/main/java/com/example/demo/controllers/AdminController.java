@@ -7,18 +7,22 @@
 package com.example.demo.controllers;
 
 import com.example.demo.beans.Company;
+import com.example.demo.beans.Coupon;
 import com.example.demo.beans.Customer;
 import com.example.demo.exceptions.CompanyException;
+import com.example.demo.exceptions.CouponException;
 import com.example.demo.exceptions.CustomerException;
 import com.example.demo.services.interfaces.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping()
+@RequestMapping("admin")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
 
     private final AdminService adminService;
@@ -26,6 +30,12 @@ public class AdminController {
     @PostMapping("/add/copmany")
     public ResponseEntity<?> addCompany(@RequestBody Company companyToAdd) throws CompanyException {
         adminService.addCompany(companyToAdd);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/add/coupon")
+    public ResponseEntity<?> addCoupon(@RequestBody Coupon couponToAdd) throws CouponException {
+        adminService.addCoupon(couponToAdd);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -61,14 +71,21 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/getAll/companies")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping(path ="/getAll/companies", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getAllCompanies() {
         return new ResponseEntity<>(adminService.getAllCompanies(), HttpStatus.OK);
     }
 
-    @GetMapping("/getAll/customers")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping(path ="/getAll/customers", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getAllCustomers() {
         return new ResponseEntity<>(adminService.getAllCustomers(), HttpStatus.OK);
+    }
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping(path = "getAll/Coupons", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getAllCoupons() {
+        return new ResponseEntity<>(adminService.getAllCoupons(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

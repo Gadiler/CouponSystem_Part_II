@@ -1,8 +1,10 @@
 package com.example.demo.services.interfaces;
 
 import com.example.demo.beans.Company;
+import com.example.demo.beans.Coupon;
 import com.example.demo.beans.Customer;
 import com.example.demo.exceptions.CompanyException;
+import com.example.demo.exceptions.CouponException;
 import com.example.demo.exceptions.CustomerException;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 @Service
 public interface AdminService {
     void addCompany(Company companyToAdd) throws CompanyException;
+
+    void addCoupon(Coupon couponToAdd) throws CouponException;
 
     void updateCompany(Company companyToUpdate) throws CompanyException;
 
@@ -29,5 +33,8 @@ public interface AdminService {
     Customer getSingleCustomer(int CustomerId) throws CustomerException;
 
     List<Customer> getAllCustomers();
+
+    List<Coupon> getAllCoupons();
+
 
 }

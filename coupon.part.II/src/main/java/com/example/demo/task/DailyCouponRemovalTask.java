@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class DailyCouponRemovalTask {
     private final CouponRepository couponRepository;
 
-    @Scheduled(fixedRate = (1000 * 10))
+    @Scheduled(fixedRate = (1000 * 60 * 60 * 24))
     public void removeExpired() {
         System.out.println("##### Expired Coupon Collector ####");
         for (Coupon coupon : couponRepository.findAll()) {

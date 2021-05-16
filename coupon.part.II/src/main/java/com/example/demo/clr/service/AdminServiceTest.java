@@ -1,11 +1,14 @@
 package com.example.demo.clr.service;
 
+import com.example.demo.beans.Category;
 import com.example.demo.beans.Company;
+import com.example.demo.beans.Coupon;
 import com.example.demo.beans.Customer;
 import com.example.demo.exceptions.CompanyException;
 import com.example.demo.services.interfaces.AdminService;
 import com.example.demo.services.interfaces.ClientService;
 import com.example.demo.utils.ArtUtils;
+import com.example.demo.utils.DateUtils;
 import com.example.demo.utils.TestUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -178,6 +181,16 @@ public class AdminServiceTest implements CommandLineRunner {
         artUtils.printCustomersTable();
         ArtUtils.printSeparator();
         /*Admin Customer*/
+
+        /*Admin Coupon*/
+        ArtUtils.testTitle("Add Coupon");
+        testUtils.printTestHeader("Add Coupon");
+        adminService.addCoupon(Coupon.builder().companyId(1).title("1").description("1").category(Category.FOOD).price(500).amount(12).startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).build());
+        adminService.getAllCoupons().forEach(System.out::println);
+        ArtUtils.printSeparator();
+        artUtils.printCouponsTable();
+        ArtUtils.printSeparator();
+        /*Admin Coupon*/
 
     }
 
