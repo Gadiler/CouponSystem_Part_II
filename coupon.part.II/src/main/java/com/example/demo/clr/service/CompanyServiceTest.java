@@ -49,9 +49,9 @@ public class CompanyServiceTest implements CommandLineRunner {
         System.out.println(companyService.getAllCoupons());
 
         ArtUtils.testTitle("Add Coupon");
-        testUtils.printTestHeader("addCoupon - Wrong title & companyId");
+        testUtils.printTestHeader("addCoupon - Wrong title");
         try {
-            companyService.addCoupon(Coupon.builder().id(11).title("Food").companyId(0).description("Bla-Bla").category(Category.FOOD).amount(10).price(640).startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).image("/assets/images/saleImage.png").build());
+            companyService.addCoupon(Coupon.builder().title("Drinks on the house").description("Bla-Bla").category(Category.FOOD).amount(10).price(640).startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).image("/assets/images/saleImage.png").build());
         } catch (CouponException e) {
             Thread.sleep(100);
             System.err.println(e.getMessage());
@@ -63,7 +63,7 @@ public class CompanyServiceTest implements CommandLineRunner {
 
         ArtUtils.testTitle("Add Coupon");
         testUtils.printTestHeader("addCoupon - Correct");
-        companyService.addCoupon(Coupon.builder().id(11).title("Food & Drinks").companyId(9).description("Bla-Bla").category(Category.FOOD).amount(10).price(640).startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).image("/assets/images/saleImage.png").build());
+        companyService.addCoupon(Coupon.builder().title("Food & Drinks").description("Bla-Bla").category(Category.FOOD).amount(10).price(640).startDate(DateUtils.getCurrentDate()).endDate(DateUtils.getDatePlusMonth()).image("/assets/images/saleImage.png").build());
         this.companyService.getAllCoupons().forEach(System.out::println);
         ArtUtils.printSeparator();
         artUtils.printCouponsTable();

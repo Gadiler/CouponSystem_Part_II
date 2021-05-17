@@ -35,17 +35,31 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
         return false;
     }
 
+    /**
+     * Add coupon to the last logged company.
+     * That why when user from the web added Coupon, the coupon added without companyId
+     * @param couponToAdd
+     * @throws CouponException
+     */
     @Override
-    public void addCoupon(Coupon couponToAdd) throws CouponException {
+    public void addCoupon(Coupon couponToAdd) throws CouponException, CompanyException {
         boolean flag = false;
+        try {
+            couponToAdd.setCompanyId(getLastLoggedCompany().getId());
+        } catch (CompanyException e) {
+            e.printStackTrace();
+        }
+
         for (Coupon coupon : getAllCoupons()) {
-            if (coupon.getTitle().equalsIgnoreCase(couponToAdd.getTitle()) && (coupon.getCompanyId() == couponToAdd.getCompanyId())) {
+            if (coupon.getTitle().equalsIgnoreCase(couponToAdd.getTitle())) {
                 throw new CouponException("The title: " + couponToAdd.getTitle() + " is already in use!");
             }
             if(couponToAdd.getCompanyId() == coupon.getCompanyId() && !flag){
                 flag = true;
             }
         }if (flag){
+            getLastLoggedCompany().getCoupons().add(couponToAdd);
+            this.couponRepository.save(couponToAdd);
             syncCouponToCustomer();
             return;
         }
