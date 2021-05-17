@@ -70,6 +70,18 @@ public class CustomerServiceImpl extends ClientService implements CustomerServic
         }
     }
 
+    /**
+     * Remove coupon from Cart
+     * @param couponId
+     * @throws CouponException
+     */
+    @Override
+    public void removeCoupon(int couponId) throws CouponException {
+        if(couponRepository.findById(couponId).isPresent()){
+            //TODO: Remove coupon from the cart
+        }
+    }
+
     @Override
     public Coupon getSingleCoupon(int couponId) throws CouponException {
         return couponRepository.findById(couponId).orElseThrow(() -> new CouponException("The id NOT found!"));
