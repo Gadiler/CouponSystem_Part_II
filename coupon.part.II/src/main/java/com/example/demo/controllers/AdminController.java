@@ -13,6 +13,7 @@ import com.example.demo.exceptions.CompanyException;
 import com.example.demo.exceptions.CouponException;
 import com.example.demo.exceptions.CustomerException;
 import com.example.demo.services.interfaces.AdminService;
+import com.example.demo.services.interfaces.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,9 +24,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("admin")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
-public class AdminController {
+public class AdminController extends ClientController{
 
     private final AdminService adminService;
+
+    @Override
+    public boolean login(String name, String email) {
+        return ((ClientService) adminService).login(name, email);
+    }
 
     @PostMapping("/add/copmany")
     public ResponseEntity<?> addCompany(@RequestBody Company companyToAdd) throws CompanyException {
@@ -92,5 +98,4 @@ public class AdminController {
     public ResponseEntity<?> getSingleCompany(@PathVariable int id) throws CompanyException {
         return new ResponseEntity<>(adminService.getSingleCompany(id), HttpStatus.OK);
     }
-
 }

@@ -35,6 +35,12 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
         return false;
     }
 
+    //TODO: Complete!
+    @Override
+    public boolean register(String email, String password) {
+        return false;
+    }
+
     /**
      * Add coupon to the last logged company.
      * That why when user from the web added Coupon, the coupon added without companyId

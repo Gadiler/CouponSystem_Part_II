@@ -10,6 +10,7 @@ import com.example.demo.beans.Category;
 import com.example.demo.beans.Coupon;
 import com.example.demo.exceptions.CompanyException;
 import com.example.demo.exceptions.CouponException;
+import com.example.demo.services.interfaces.ClientService;
 import com.example.demo.services.interfaces.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,14 @@ import javax.websocket.server.PathParam;
 @RequestMapping("companies")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
-public class CompanyController {
+public class CompanyController extends ClientController{
 
     private final CompanyService companyService;
+
+    @Override
+    public boolean login(String name, String email) {
+        return ((ClientService) companyService).login(name, email);
+    }
 
     @PostMapping
     public ResponseEntity<?> addCoupon(@RequestBody Coupon couponToAdd) throws CouponException, CompanyException {

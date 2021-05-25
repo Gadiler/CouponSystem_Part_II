@@ -9,6 +9,7 @@ package com.example.demo.controllers;
 import com.example.demo.beans.Category;
 import com.example.demo.beans.Coupon;
 import com.example.demo.exceptions.*;
+import com.example.demo.services.interfaces.ClientService;
 import com.example.demo.services.interfaces.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,15 @@ import javax.websocket.server.PathParam;
 @RequestMapping("customers")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
-public class CustomerController {
+public class CustomerController extends ClientController {
 
     private final CustomerService customerService;
+
+
+    @Override
+    public boolean login(String name, String email) {
+        return ((ClientService) customerService).login(name, email);
+    }
 
     @PutMapping
     public ResponseEntity<?> purchaseCoupon(@RequestBody Coupon couponToAdd) throws CustomerException, CouponException, AmountException, ExpirationDate, ExistException, CompanyException {
@@ -63,5 +70,4 @@ public class CustomerController {
     public ResponseEntity<?> getLastLoggedCompany() throws CustomerException {
         return new ResponseEntity<>(customerService.getLastLoggedCustomer(), HttpStatus.OK);
     }
-
 }

@@ -28,6 +28,12 @@ public class AdminServiceImpl extends ClientService implements AdminService {
         return email.equalsIgnoreCase("admin@admin.com") && password.equals("admin");
     }
 
+    //TODO: Complete!
+    @Override
+    public boolean register(String email, String password) {
+        return false;
+    }
+
     /**
      * Admin service: Add company to database.
      *

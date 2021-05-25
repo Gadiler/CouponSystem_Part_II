@@ -15,6 +15,7 @@ public abstract class ClientService {
     protected final CustomerRepository customerRepository;
 
     public abstract boolean login(String email, String password);
+    public abstract boolean register(String email, String password);
 
     /**
      * Run through each Coupon, if coupon.companyId == companyId then update. else, delete.
@@ -29,4 +30,5 @@ public abstract class ClientService {
             }, () -> couponRepository.deleteById(coupon.getId()));
         });
     }
+
 }

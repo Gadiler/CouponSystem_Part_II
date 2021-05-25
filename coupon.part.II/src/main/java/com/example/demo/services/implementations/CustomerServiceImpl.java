@@ -37,6 +37,12 @@ public class CustomerServiceImpl extends ClientService implements CustomerServic
         return false;
     }
 
+    //TODO: Complete!
+    @Override
+    public boolean register(String email, String password) {
+        return false;
+    }
+
     @Override
     public void purchaseCoupon(Coupon purchaseCoupon) throws ExistException, AmountException, ExpirationDate {
         Coupon coupon = null;
