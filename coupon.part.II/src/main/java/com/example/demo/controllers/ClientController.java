@@ -6,10 +6,14 @@
 
 package com.example.demo.controllers;
 
-import lombok.RequiredArgsConstructor;
+import com.example.demo.beans.User;
+import com.example.demo.exceptions.DeniedAccessException;
+import org.springframework.http.ResponseEntity;
 
 
 public abstract class ClientController {
 
-    public abstract boolean login(String name, String email);
+    public abstract ResponseEntity<?> login(User user) throws DeniedAccessException;
+//    public abstract boolean login(User user) throws DeniedAccessException;
+
 }

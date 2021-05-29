@@ -8,8 +8,12 @@ package com.example.demo.controllers;
 
 import com.example.demo.beans.Category;
 import com.example.demo.beans.Coupon;
+import com.example.demo.beans.User;
 import com.example.demo.exceptions.CompanyException;
 import com.example.demo.exceptions.CouponException;
+import com.example.demo.exceptions.DeniedAccessException;
+import com.example.demo.login.ClientType;
+import com.example.demo.login.LoginManager;
 import com.example.demo.services.interfaces.ClientService;
 import com.example.demo.services.interfaces.CompanyService;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +27,23 @@ import javax.websocket.server.PathParam;
 @RequestMapping("companies")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
-public class CompanyController extends ClientController{
+public class CompanyController extends ClientController {
 
     private final CompanyService companyService;
+    private final LoginManager loginManager;
+
+//    @Override
+//    @PostMapping(path = "/login")
+//    public boolean login(@RequestBody User user) throws DeniedAccessException {
+//        return ((ClientService) companyService).login(user.getEmail(), user.getPassword());
+////        return loginManager.register(password, password, ClientType.COMPANY);
+////        return new ResponseEntity<String>(loginManager.register(password, password, ClientType.COMPANY), HttpStatus.OK);
+//    }
 
     @Override
-    public boolean login(String name, String email) {
-        return ((ClientService) companyService).login(name, email);
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user) throws DeniedAccessException {
+        return new ResponseEntity<>(loginManager.register(user.getEmail(), user.getPassword(), ClientType.COMPANY), HttpStatus.OK);
     }
 
     @PostMapping

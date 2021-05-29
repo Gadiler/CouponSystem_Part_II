@@ -19,7 +19,7 @@ public class CustomerControllerAdvice {
 
     @ExceptionHandler(CustomerException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDetails handleErrors(Exception e){
+    public ErrorDetails handleErrors(Exception e) {
         return new ErrorDetails("CatException: Something went wrong!", e.getMessage(), 400);
     }
 }

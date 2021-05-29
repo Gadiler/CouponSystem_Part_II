@@ -6,12 +6,14 @@
 
 package com.example.demo.controllers;
 
-import com.example.demo.beans.Company;
-import com.example.demo.beans.Coupon;
-import com.example.demo.beans.Customer;
+import com.example.demo.beans.*;
 import com.example.demo.exceptions.CompanyException;
 import com.example.demo.exceptions.CouponException;
 import com.example.demo.exceptions.CustomerException;
+import com.example.demo.exceptions.DeniedAccessException;
+import com.example.demo.login.ClientType;
+import com.example.demo.login.LoginManager;
+import com.example.demo.security.TokenManager;
 import com.example.demo.services.interfaces.AdminService;
 import com.example.demo.services.interfaces.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +25,38 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("admin")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
-public class AdminController extends ClientController{
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
+public class AdminController extends ClientController {
 
     private final AdminService adminService;
+    private final LoginManager loginManager;
+    private final TokenManager tokenManager;
+
 
     @Override
-    public boolean login(String name, String email) {
-        return ((ClientService) adminService).login(name, email);
+    @PostMapping(path = "/login")
+    public ResponseEntity<?> login(@RequestBody User user) throws DeniedAccessException {
+        String token = loginManager.register(user.getEmail(), user.getPassword(), ClientType.ADMIN);
+        System.out.println(token);
+        if(((ClientService) adminService).login(user.getEmail(), user.getPassword())){
+            return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping("/add/copmany")
+//    @Override
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody User user) throws DeniedAccessException {
+//        String body = loginManager.register(user.getEmail(), user.getPassword(), ClientType.ADMIN);
+//        System.out.println(body);
+//        if (((ClientService) adminService).login(user.getEmail(), user.getPassword()))
+//            return new ResponseEntity<>(HttpStatus.CREATED);
+//        else
+//            return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+//
+//    }
+
+    @PostMapping("/add/company")
     public ResponseEntity<?> addCompany(@RequestBody Company companyToAdd) throws CompanyException {
         adminService.addCompany(companyToAdd);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -77,18 +100,19 @@ public class AdminController extends ClientController{
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping(path ="/getAll/companies", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAllCompanies() {
-        return new ResponseEntity<>(adminService.getAllCompanies(), HttpStatus.OK);
+    @GetMapping(path = "/getAll/companies", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getAllCompanies(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
+        if (tokenManager.isExist(token))
+            return new ResponseEntity<>(adminService.getAllCompanies(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping(path ="/getAll/customers", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/getAll/customers", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getAllCustomers() {
         return new ResponseEntity<>(adminService.getAllCustomers(), HttpStatus.OK);
     }
-    @CrossOrigin(origins = "http://localhost:4200")
+
     @GetMapping(path = "getAll/Coupons", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getAllCoupons() {
         return new ResponseEntity<>(adminService.getAllCoupons(), HttpStatus.OK);

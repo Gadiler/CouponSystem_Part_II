@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "companies")
 @Builder
-public class Company {
+public class Company extends User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

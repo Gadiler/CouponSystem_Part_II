@@ -37,5 +37,15 @@ public class LoginManagerTest implements CommandLineRunner {
         adminService.getAllCustomers().forEach(System.out::println);
         ArtUtils.printSeparator();
 
+
+        ArtUtils.testTitle("Register - Admin");
+        testUtils.printTestHeader("Register - Correct");
+        System.out.println(loginManager.register("admin@admin.com", "admin", ClientType.ADMIN));
+        ArtUtils.printSeparator();
+
+        ArtUtils.testTitle("Register - Customer");
+        testUtils.printTestHeader("Register - Correct");
+        System.out.println(loginManager.register("Marshall@Gmail.com", "MarshallEriksen", ClientType.CUSTOMER));
+        ArtUtils.printSeparator();
     }
 }

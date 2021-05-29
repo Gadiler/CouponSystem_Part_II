@@ -8,7 +8,10 @@ package com.example.demo.controllers;
 
 import com.example.demo.beans.Category;
 import com.example.demo.beans.Coupon;
+import com.example.demo.beans.User;
 import com.example.demo.exceptions.*;
+import com.example.demo.login.ClientType;
+import com.example.demo.login.LoginManager;
 import com.example.demo.services.interfaces.ClientService;
 import com.example.demo.services.interfaces.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +29,22 @@ import javax.websocket.server.PathParam;
 public class CustomerController extends ClientController {
 
     private final CustomerService customerService;
+    private final LoginManager loginManager;
 
+//    @Override
+//    @PostMapping(path = "/login")
+//    public boolean login(@RequestBody User user) throws DeniedAccessException {
+//        return ((ClientService) customerService).login(user.getEmail(), user.getPassword());
+//
+////        return loginManager.register(password, password, ClientType.CUSTOMER);
+////        return new ResponseEntity<String>(loginManager.register(password, password, ClientType.CUSTOMER), HttpStatus.OK);
+//
+//    }
 
     @Override
-    public boolean login(String name, String email) {
-        return ((ClientService) customerService).login(name, email);
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user) throws DeniedAccessException {
+        return new ResponseEntity<>(loginManager.register(user.getEmail(), user.getPassword(), ClientType.CUSTOMER), HttpStatus.OK);
     }
 
     @PutMapping

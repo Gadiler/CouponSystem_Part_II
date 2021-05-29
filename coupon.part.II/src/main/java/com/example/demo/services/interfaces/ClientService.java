@@ -15,6 +15,7 @@ public abstract class ClientService {
     protected final CustomerRepository customerRepository;
 
     public abstract boolean login(String email, String password);
+
     public abstract boolean register(String email, String password);
 
     /**

@@ -12,9 +12,6 @@ import com.example.demo.accessingdatajpa.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLException;
-import java.util.Map;
-
 @Component
 @RequiredArgsConstructor
 public class ArtUtils {

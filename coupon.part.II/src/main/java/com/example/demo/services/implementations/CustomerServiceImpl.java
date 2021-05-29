@@ -78,12 +78,13 @@ public class CustomerServiceImpl extends ClientService implements CustomerServic
 
     /**
      * Remove coupon from Cart
+     *
      * @param couponId
      * @throws CouponException
      */
     @Override
     public void removeCoupon(int couponId) throws CouponException {
-        if(couponRepository.findById(couponId).isPresent()){
+        if (couponRepository.findById(couponId).isPresent()) {
             //TODO: Remove coupon from the cart
         }
     }
