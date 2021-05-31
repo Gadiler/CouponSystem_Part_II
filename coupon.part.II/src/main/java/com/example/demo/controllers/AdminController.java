@@ -86,8 +86,8 @@ public class AdminController extends ClientController {
     }
 
     @PostMapping(path = "/getAll/companies", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAllCompanies(@RequestHeader(name = "Authorization", required = false) String token) throws DeniedAccessException {
-        System.out.println(TAG + ": getAllCompanies()" + token);
+    public ResponseEntity<?> getAllCompanies(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
+        System.out.println(TAG + ": getAllCompanies() " + token);
         if (tokenManager.isExist(token)) {
             System.out.println(adminService.getAllCompanies());
             return new ResponseEntity<>(adminService.getAllCompanies(), HttpStatus.OK);

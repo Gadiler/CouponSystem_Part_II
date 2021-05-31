@@ -6,6 +6,7 @@
 
 package com.example.demo.security;
 
+import com.example.demo.exceptions.DeniedAccessException;
 import com.example.demo.services.interfaces.ClientService;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +27,10 @@ public class TokenManager {
     }
 
     //TODO: Need to replace to other method, check if CurrentTimeMillis is before X time.
-    public boolean isExist(String token) {
+    public boolean isExist(String token) throws DeniedAccessException {
         if(map.containsKey(token)) {
             map.get(token).setCurrentTimeMillis(System.currentTimeMillis());
             return true;
-        }return false;
+        }throw new DeniedAccessException("Unauthorized!");
     }
 }
