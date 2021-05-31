@@ -12,8 +12,5 @@ import org.springframework.http.ResponseEntity;
 
 
 public abstract class ClientController {
-
     public abstract ResponseEntity<?> login(User user) throws DeniedAccessException;
-//    public abstract boolean login(User user) throws DeniedAccessException;
-
 }

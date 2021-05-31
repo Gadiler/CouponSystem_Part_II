@@ -15,7 +15,6 @@ import com.example.demo.login.ClientType;
 import com.example.demo.login.LoginManager;
 import com.example.demo.security.TokenManager;
 import com.example.demo.services.interfaces.AdminService;
-import com.example.demo.services.interfaces.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class AdminController extends ClientController {
-
+    private final String TAG = this.getClass().getSimpleName();
     private final AdminService adminService;
     private final LoginManager loginManager;
     private final TokenManager tokenManager;
@@ -38,23 +37,9 @@ public class AdminController extends ClientController {
     public ResponseEntity<?> login(@RequestBody User user) throws DeniedAccessException {
         String token = loginManager.register(user.getEmail(), user.getPassword(), ClientType.ADMIN);
         System.out.println(token);
-        if(((ClientService) adminService).login(user.getEmail(), user.getPassword())){
-            return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
-        }else
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
+        return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
 
-//    @Override
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody User user) throws DeniedAccessException {
-//        String body = loginManager.register(user.getEmail(), user.getPassword(), ClientType.ADMIN);
-//        System.out.println(body);
-//        if (((ClientService) adminService).login(user.getEmail(), user.getPassword()))
-//            return new ResponseEntity<>(HttpStatus.CREATED);
-//        else
-//            return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
-//
-//    }
+    }
 
     @PostMapping("/add/company")
     public ResponseEntity<?> addCompany(@RequestBody Company companyToAdd) throws CompanyException {
@@ -100,11 +85,13 @@ public class AdminController extends ClientController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/getAll/companies", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAllCompanies(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
-        if (tokenManager.isExist(token))
+    @PostMapping(path = "/getAll/companies", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getAllCompanies(@RequestHeader(name = "Authorization", required = false) String token) throws DeniedAccessException {
+        System.out.println(TAG + ": getAllCompanies()" + token);
+        if (tokenManager.isExist(token)) {
+            System.out.println(adminService.getAllCompanies());
             return new ResponseEntity<>(adminService.getAllCompanies(), HttpStatus.OK);
-        else
+        } else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 

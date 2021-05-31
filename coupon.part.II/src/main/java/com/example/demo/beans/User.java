@@ -6,6 +6,7 @@
 
 package com.example.demo.beans;
 
+import com.example.demo.login.ClientType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    protected int id;
     protected String email;
     protected String password;
+    protected String clientType;
 }
