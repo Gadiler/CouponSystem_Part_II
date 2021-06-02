@@ -13,6 +13,8 @@ import com.example.demo.beans.User;
 import com.example.demo.exceptions.*;
 import com.example.demo.login.ClientType;
 import com.example.demo.login.LoginManager;
+import com.example.demo.security.TokenManager;
+import com.example.demo.services.interfaces.AdminService;
 import com.example.demo.services.interfaces.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,11 +27,13 @@ import javax.websocket.server.PathParam;
 @RestController
 @RequestMapping("customers")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class CustomerController extends ClientController {
 
     private final CustomerService customerService;
+    private final AdminService adminService;
     private final LoginManager loginManager;
+    private final TokenManager tokenManager;
 
     @Override
     @PostMapping("/login")
@@ -38,16 +42,29 @@ public class CustomerController extends ClientController {
         return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> purchaseCoupon(@RequestBody Coupon couponToAdd) throws CustomerException, CouponException, AmountException, ExpirationDate, ExistException, CompanyException {
-        //TODO: 1. What service use to add Customer.
-        customerService.purchaseCoupon(couponToAdd);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping("/purchase")
+    public ResponseEntity<?> purchaseCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon couponToAdd) throws CustomerException, CouponException, AmountException, ExpirationDate, ExistException, CompanyException, DeniedAccessException {
+        if (tokenManager.isExist(token)) {
+            customerService.purchaseCoupon(couponToAdd);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCoupons() {
-        return new ResponseEntity<>(customerService.getAllCoupons(), HttpStatus.OK);
+    public ResponseEntity<?> getAllCoupons(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
+        if (tokenManager.isExist(token))
+            return new ResponseEntity<>(customerService.getAllCoupons(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/getAll/coupon/homePage")
+    public ResponseEntity<?> getAllCouponForHomePage(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
+        if (tokenManager.isExist(token))
+            return new ResponseEntity<>(adminService.getAllCoupons(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/{minPrice}")

@@ -6,31 +6,36 @@
 
 package com.example.demo.controllers;
 
-import com.example.demo.beans.Category;
-import com.example.demo.beans.Coupon;
-import com.example.demo.beans.LoginResponse;
-import com.example.demo.beans.User;
+import com.example.demo.beans.*;
 import com.example.demo.exceptions.CompanyException;
 import com.example.demo.exceptions.CouponException;
 import com.example.demo.exceptions.DeniedAccessException;
 import com.example.demo.login.ClientType;
 import com.example.demo.login.LoginManager;
+import com.example.demo.security.TokenManager;
+import com.example.demo.services.interfaces.AdminService;
 import com.example.demo.services.interfaces.CompanyService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("companies")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class CompanyController extends ClientController {
 
     private final CompanyService companyService;
+    private final AdminService adminService;
     private final LoginManager loginManager;
+    private final TokenManager tokenManager;
 
     @Override
     @PostMapping("/login")
@@ -40,9 +45,12 @@ public class CompanyController extends ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addCoupon(@RequestBody Coupon couponToAdd) throws CouponException, CompanyException {
-        companyService.addCoupon(couponToAdd);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> addCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon couponToAdd) throws CouponException, CompanyException, DeniedAccessException {
+        if (tokenManager.isExist(token)){
+            companyService.addCoupon(couponToAdd);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @DeleteMapping("/{id}")
@@ -59,8 +67,11 @@ public class CompanyController extends ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCoupons() {
-        return new ResponseEntity<>(companyService.getAllCoupons(), HttpStatus.OK);
+    public ResponseEntity<?> getAllCoupons(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
+        if (tokenManager.isExist(token))
+            return new ResponseEntity<>(companyService.getAllCoupons(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/{id}")
@@ -69,8 +80,11 @@ public class CompanyController extends ClientController {
     }
 
     @GetMapping("/lastLogged")
-    public ResponseEntity<?> getLastLoggedCompany() throws CompanyException {
-        return new ResponseEntity<>(companyService.getLastLoggedCompany(), HttpStatus.OK);
+    public ResponseEntity<?> getLastLoggedCompany(@RequestHeader(name = "Authorization") String token) throws CompanyException, DeniedAccessException {
+        if (tokenManager.isExist(token))
+            return new ResponseEntity<>(companyService.getLastLoggedCompany(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/{maxPrice}")
@@ -86,5 +100,24 @@ public class CompanyController extends ClientController {
     @GetMapping("/{category}")
     public ResponseEntity<?> getAllCouponFromCategory(@PathParam("category") Category category) {
         return new ResponseEntity<>(companyService.getAllCouponFromCategory(category), HttpStatus.OK);
+    }
+
+    @GetMapping("getAll/customers")
+    public ResponseEntity<?> getAllMyCustomers(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
+        List<Customer> customersList = new ArrayList<>();
+        if(tokenManager.isExist(token)){
+            adminService.getAllCustomers().forEach(customer -> {
+                customer.getCouponList().forEach(coupon -> {
+                    try {
+                        if (coupon.getCompanyId() == companyService.getLastLoggedCompany().getId()){
+                            customersList.add(customer);
+                        }
+                    } catch (CompanyException e) {
+                        System.out.println(e.getMessage());
+                    }
+                });
+            });
+            return new ResponseEntity<>(customersList, HttpStatus.OK);
+        }return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }

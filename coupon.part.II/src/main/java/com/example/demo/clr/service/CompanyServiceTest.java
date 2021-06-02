@@ -44,7 +44,7 @@ public class CompanyServiceTest implements CommandLineRunner {
         System.out.println(((ClientService) companyService).login("McDonaldsssss@Gmail.com", "123456"));
         ArtUtils.printSeparator();
         testUtils.printTestHeader("Login - Correct");
-        System.out.println(((ClientService) companyService).login("McDonalds@Gmail.com", "1234"));
+        System.out.println(((ClientService) companyService).login("Pepis@Gmail.com", "1234"));
         ArtUtils.printSeparator();
         System.out.println(companyService.getAllCoupons());
 

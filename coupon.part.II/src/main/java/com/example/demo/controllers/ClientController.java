@@ -10,7 +10,7 @@ import com.example.demo.beans.User;
 import com.example.demo.exceptions.DeniedAccessException;
 import org.springframework.http.ResponseEntity;
 
-
 public abstract class ClientController {
+
     public abstract ResponseEntity<?> login(User user) throws DeniedAccessException;
 }

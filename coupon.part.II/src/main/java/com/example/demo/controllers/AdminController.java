@@ -17,7 +17,6 @@ import com.example.demo.security.TokenManager;
 import com.example.demo.services.interfaces.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class AdminController extends ClientController {
+
     private final String TAG = this.getClass().getSimpleName();
     private final AdminService adminService;
     private final LoginManager loginManager;
@@ -85,24 +85,28 @@ public class AdminController extends ClientController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/getAll/companies", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/getAll/companies")//, produces = {MediaType.APPLICATION_JSON_VALUE}
     public ResponseEntity<?> getAllCompanies(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
-        System.out.println(TAG + ": getAllCompanies() " + token);
-        if (tokenManager.isExist(token)) {
-            System.out.println(adminService.getAllCompanies());
+        if (tokenManager.isExist(token))
             return new ResponseEntity<>(adminService.getAllCompanies(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping(path = "/getAll/customers")
+    public ResponseEntity<?> getAllCustomers(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
+        if (tokenManager.isExist(token)) {
+            return new ResponseEntity<>(adminService.getAllCustomers(), HttpStatus.OK);
         } else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping(path = "/getAll/customers", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAllCustomers() {
-        return new ResponseEntity<>(adminService.getAllCustomers(), HttpStatus.OK);
-    }
-
-    @GetMapping(path = "getAll/Coupons", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAllCoupons() {
-        return new ResponseEntity<>(adminService.getAllCoupons(), HttpStatus.OK);
+    @GetMapping(path = "getAll/Coupons")
+    public ResponseEntity<?> getAllCoupons(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
+        if (tokenManager.isExist(token)) {
+            return new ResponseEntity<>(adminService.getAllCoupons(), HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/{id}")
