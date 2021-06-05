@@ -16,6 +16,8 @@ public interface AdminService {
 
     void addCoupon(Coupon couponToAdd) throws CouponException;
 
+    void updateCoupon(Coupon couponToUpdate) throws CouponException;
+
     void updateCompany(Company companyToUpdate) throws CompanyException;
 
     void deleteCompany(int companyId) throws CompanyException;

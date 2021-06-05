@@ -64,6 +64,18 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     }
 
     @Override
+    public void updateCoupon(Coupon couponToUpdate) throws CouponException {
+        getAllCoupons().forEach(coupon -> {
+            if(coupon.getId() == couponToUpdate.getId()){
+                this.couponRepository.saveAndFlush(couponToUpdate);
+                syncCouponToCustomer();
+                return;
+            }
+        });
+        throw new CouponException("updateCoupon(): There ain't no such coupon with id: " + couponToUpdate.getId() );
+    }
+
+    @Override
     public void updateCompany(Company companyToUpdate) throws CompanyException {
         for (Company comp : getAllCompanies()) {
             if (comp.getName().equalsIgnoreCase(companyToUpdate.getName()) && comp.getId() == companyToUpdate.getId()) {

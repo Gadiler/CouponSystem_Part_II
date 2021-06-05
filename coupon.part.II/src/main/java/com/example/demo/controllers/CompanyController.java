@@ -15,8 +15,6 @@ import com.example.demo.login.LoginManager;
 import com.example.demo.security.TokenManager;
 import com.example.demo.services.interfaces.AdminService;
 import com.example.demo.services.interfaces.CompanyService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,24 +44,30 @@ public class CompanyController extends ClientController {
 
     @PostMapping
     public ResponseEntity<?> addCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon couponToAdd) throws CouponException, CompanyException, DeniedAccessException {
-        if (tokenManager.isExist(token)){
+        if (tokenManager.isExist(token)) {
             companyService.addCoupon(couponToAdd);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        }else
+        } else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCoupon(@PathVariable int id) throws CouponException {
+    public ResponseEntity<?> deleteCoupon(@RequestHeader(name = "Authorization") String token, @PathVariable int id) throws CouponException, DeniedAccessException {
         //TODO: figure if that working or change from String to int.
-        companyService.deleteCoupon(id);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        if (tokenManager.isExist(token)) {
+            companyService.deleteCoupon(id);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateCoupon(@RequestBody Coupon couponToUpdate) throws CouponException {
-        companyService.updateCoupon(couponToUpdate);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> updateCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon couponToUpdate) throws CouponException, DeniedAccessException {
+        if (tokenManager.isExist(token)) {
+            companyService.updateCoupon(couponToUpdate);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping
@@ -105,11 +109,11 @@ public class CompanyController extends ClientController {
     @GetMapping("getAll/customers")
     public ResponseEntity<?> getAllMyCustomers(@RequestHeader(name = "Authorization") String token) throws DeniedAccessException {
         List<Customer> customersList = new ArrayList<>();
-        if(tokenManager.isExist(token)){
+        if (tokenManager.isExist(token)) {
             adminService.getAllCustomers().forEach(customer -> {
                 customer.getCouponList().forEach(coupon -> {
                     try {
-                        if (coupon.getCompanyId() == companyService.getLastLoggedCompany().getId()){
+                        if (coupon.getCompanyId() == companyService.getLastLoggedCompany().getId()) {
                             customersList.add(customer);
                         }
                     } catch (CompanyException e) {
@@ -118,6 +122,7 @@ public class CompanyController extends ClientController {
                 });
             });
             return new ResponseEntity<>(customersList, HttpStatus.OK);
-        }return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }

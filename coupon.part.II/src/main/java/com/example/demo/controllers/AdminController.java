@@ -42,35 +42,50 @@ public class AdminController extends ClientController {
     }
 
     @PostMapping("/add/company")
-    public ResponseEntity<?> addCompany(@RequestBody Company companyToAdd) throws CompanyException {
-        adminService.addCompany(companyToAdd);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> addCompany(@RequestHeader(name = "Authorization") String token, @RequestBody Company companyToAdd) throws CompanyException, DeniedAccessException {
+        if (tokenManager.isExist(token)) {
+            adminService.addCompany(companyToAdd);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/add/coupon")
-    public ResponseEntity<?> addCoupon(@RequestBody Coupon couponToAdd) throws CouponException {
-        adminService.addCoupon(couponToAdd);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> addCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon couponToAdd) throws CouponException, DeniedAccessException {
+        if (tokenManager.isExist(token)) {
+            adminService.addCoupon(couponToAdd);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/add/customer")
-    public ResponseEntity<?> addCustomer(@RequestBody Customer customerToAdd) throws CustomerException {
-        adminService.addCustomer(customerToAdd);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> addCustomer(@RequestHeader(name = "Authorization") String token, @RequestBody Customer customerToAdd) throws CustomerException, DeniedAccessException {
+        if (tokenManager.isExist(token)) {
+            adminService.addCustomer(customerToAdd);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @DeleteMapping("/deleteCompany/{id}")
-    public ResponseEntity<?> deleteCompany(@PathVariable int id) throws CompanyException {
+    public ResponseEntity<?> deleteCompany(@RequestHeader(name = "Authorization") String token, @PathVariable int id) throws CompanyException, DeniedAccessException {
         //TODO: figure if that working or change from String to int.
-        adminService.deleteCompany(id);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        if (tokenManager.isExist(token)) {
+            adminService.deleteCompany(id);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @DeleteMapping("/deleteCustomer/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable int id) {
+    public ResponseEntity<?> deleteCustomer(@RequestHeader(name = "Authorization") String token, @PathVariable int id) throws DeniedAccessException {
         //TODO: figure if that working or change from String to int.
-        adminService.deleteCustomer(id);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        if (tokenManager.isExist(token)) {
+            adminService.deleteCustomer(id);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PutMapping("/updateCompany")
@@ -83,6 +98,15 @@ public class AdminController extends ClientController {
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customerToUpdate) throws CustomerException {
         adminService.updateCustomer(customerToUpdate);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/updateCoupon")
+    public ResponseEntity<?> updateCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon couponToUpdate) throws CouponException, DeniedAccessException {
+        if (tokenManager.isExist(token)) {
+            adminService.updateCoupon(couponToUpdate);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping(path = "/getAll/companies")//, produces = {MediaType.APPLICATION_JSON_VALUE}

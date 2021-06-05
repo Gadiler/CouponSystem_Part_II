@@ -92,7 +92,7 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
             couponRepository.deleteById(couponId);
             syncCouponToCustomer();
         } else {
-            throw new CouponException("Can't find the company!");
+            throw new CouponException("Can't find the coupon!");
         }
     }
 
